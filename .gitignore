@@ -35,7 +35,7 @@ yarn-error.log
 /coverage
 /libpeerconnection.log
 testem.log
-/typings
+/typingsadd
 
 # System files
 .DS_Store
@@ -43,4 +43,4 @@ Thumbs.db
 
 .vscode
 .vscode/*
-#.editorconfig
+.editorconfig
