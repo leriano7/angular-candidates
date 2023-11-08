@@ -43,4 +43,4 @@ Thumbs.db
 
 .vscode
 .vscode/*
-.editorconfig
+#.editorconfig
