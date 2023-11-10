@@ -57,7 +57,7 @@ export class CandidatesService {
     return throwError(() => errorResponse);
   };
 
-  public remove = (id: number) => {
+  public remove = (id: number) : Observable<any> => {
     const index = this.candidates.findIndex((c) => c.id === id);
     if(index>-1) {
       this.candidates.splice(index, 1);
