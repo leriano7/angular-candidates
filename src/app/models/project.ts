@@ -1,5 +1,5 @@
 export interface Project {
-    name: string[],
+    name: string,
     technology : string[],
     description: string,
     experience: number
