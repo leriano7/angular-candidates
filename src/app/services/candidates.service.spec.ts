@@ -9,21 +9,21 @@ import { mergeMap, switchMap } from 'rxjs';
 describe('CandidatesService', () => {
   let service: CandidatesService;
 
-  const selfCandidates : Candidate[] = [{
-    id : 1,
-    name : 'Ismael',
-    surname : 'López Quintero',
-    email : 'correo@correo.com',
-    experience : Experience.Senior,
-    previousProjects : [],
-    age : 40
+  const selfCandidates: Candidate[] = [{
+    id: 1,
+    name: 'Ismael',
+    surname: 'López Quintero',
+    email: 'correo@correo.com',
+    experience: Experience.Senior,
+    previousProjects: [],
+    age: 40
   }];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers : [{
+      providers: [{
         provide: APP_CONFIG,
-        useValue : Config
+        useValue: Config
       }]
     });
     service = TestBed.inject(CandidatesService);
@@ -42,7 +42,7 @@ describe('CandidatesService', () => {
 
   it("allows to retrieve self one candidate", () => {
     service = new CandidatesService({
-      candidates : selfCandidates
+      candidates: selfCandidates
     });
     service.getCandidates().subscribe((retrieved) => {
       expect(retrieved.length).toBe(1);
@@ -57,67 +57,72 @@ describe('CandidatesService', () => {
     });
   });
 
-  it("allows to create a new candidate", () => {
-    const newCandidate : Candidate = {
-      name : 'Miguel',
-      surname : 'Rodríguez Fernández',
-      email : 'correo2@correo.com',
-      experience : Experience.Midlevel,
-      previousProjects : []
+  it("allows to create a new candidate", (done) => {
+    const newCandidate: Candidate = {
+      name: 'Miguel',
+      surname: 'Rodríguez Fernández',
+      email: 'correo2@correo.com',
+      experience: Experience.Midlevel,
+      previousProjects: []
     };
 
     service.save(newCandidate)
-      .pipe( switchMap(   () => service.getCandidates()   ) )
-      .subscribe((candidates)=> {
-        // switchMap -> getCandidates is necessary
-        const nCandidates = candidates.length;
-        const lastCandidate = candidates[nCandidates-1];
-        expect(lastCandidate.id).toBeDefined();
-        expect(lastCandidate.surname).toBe('Rodríguez Fernández');
-    });
+      .pipe(switchMap(() => service.getCandidates()))
+      .subscribe({
+        next: (candidates) => {
+          // switchMap -> getCandidates is necessary
+          const nCandidates = candidates.length;
+          const lastCandidate = candidates[nCandidates - 1];
+          expect(lastCandidate.id).toBeDefined();
+          expect(lastCandidate.surname).toBe('Rodríguez Fernández');
+          done();
+        },
+        error: () => {
+          done.fail();
+        }
+      });
   });
- 
+
   it("allows to update a candidate", (done) => {
-    const candidateToUpdate : Candidate = {
+    const candidateToUpdate: Candidate = {
       id: 1,
       email: "candidateguay@email.com",
-      name : 'Prueba',
+      name: 'Prueba',
       previousProjects: [
-          {
-              name: "BBVA",
-              technology: ["ReactJS", "JQuery"],
-              description:
-                  "Programador encargado de correcciones en la página web de venta privada",
-              experience: 1
-          }
+        {
+          name: "BBVA",
+          technology: ["ReactJS", "JQuery"],
+          description:
+            "Programador encargado de correcciones en la página web de venta privada",
+          experience: 1
+        }
       ],
-      experience : Experience.Senior,
+      experience: Experience.Senior,
       surname: "Martínez"
     }
 
     service.update(candidateToUpdate)
-      .pipe( mergeMap(   () => service.getCandidates()   ) )
+      .pipe(mergeMap(() => service.getCandidates()))
       .subscribe((candidates) => {
         console.log(candidates);
         console.log(candidateToUpdate);
         expect(candidates[1].previousProjects).toEqual(candidateToUpdate.previousProjects);
         done();
       });
-    });  
+  });
 
   it("allows to delete a candidate", (done) => {
     service.remove(2)
-      .pipe(  mergeMap(   () =>  service.getCandidates()  ) )
+      .pipe(mergeMap(() => service.getCandidates()))
       .subscribe({
-        next : (candidates) => {
+        next: (candidates) => {
           const index = candidates.findIndex((c) => c.id === 2);
           expect(index).toBe(-1);
           done();
         },
-        error : (error) => {
+        error: (error) => {
           done.fail();
         }
       });
   });
-
 });
