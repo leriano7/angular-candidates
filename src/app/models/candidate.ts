@@ -2,7 +2,7 @@ import { Experience } from "./experience";
 import { Project } from "./project";
 
 export interface Candidate {
-    id? : number | string;
+    id? : number;
     name: string;
     surname: string;
     email: string;
