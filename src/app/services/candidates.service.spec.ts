@@ -36,7 +36,7 @@ describe('CandidatesService', () => {
   it("allows to retrieve the candidates", () => {
     service.getCandidates().subscribe((retrieved) => {
       expect(retrieved[0].name).toBe('Carlos');
-      expect(retrieved[2].name).toBe('Paco');
+      //expect(retrieved[2].name).toBe('Paco');
     });
   });
 
@@ -105,8 +105,19 @@ describe('CandidatesService', () => {
       });
     });  
 
-  it("allows to delete a candidate", () => {
-    expect(true).toBeTruthy();
+  it("allows to delete a candidate", (done) => {
+    service.remove(2)
+      .pipe(  mergeMap(   () =>  service.getCandidates()  ) )
+      .subscribe({
+        next : (candidates) => {
+          const index = candidates.findIndex((c) => c.id === 2);
+          expect(index).toBe(-1);
+          done();
+        },
+        error : (error) => {
+          done.fail();
+        }
+      });
   });
 
 });

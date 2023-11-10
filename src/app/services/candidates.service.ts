@@ -19,6 +19,17 @@ export class CandidatesService {
     return this.subject.asObservable();
   }
 
+  public getCandidate = (id: number) : Observable<Candidate> => {
+    const candidate = this.candidates.find((c) => c.id === id);
+    if(candidate) return of(candidate);
+    const errorResponse = {
+      status : 404,
+      error : new Error('Not found in getCandidate '+id),
+      message : 'Not found in getCandidate '+id
+    };
+    return throwError(() => errorResponse);
+  }
+
   public save = (candidate : Candidate) : Observable<Candidate> => {
     const nextId = this.getNextId();
     const savedCandidate = Object.assign({}, candidate, { id : nextId });
@@ -37,13 +48,32 @@ export class CandidatesService {
         return of(this.candidates[index]);
       }
     }
+    const submessage = candidate.id ? ''+candidate.id : 'No ID';
     const errorResponse = {
       status : 404,
-      error : new Error('Not found in update'),
-      message : 'Not found in update'
+      error : new Error('Not found in update '+submessage),
+      message : 'Not found in update '+submessage
     };
     return throwError(() => errorResponse);
   };
+
+  public remove = (id: number) => {
+    const index = this.candidates.findIndex((c) => c.id === id);
+    if(index>-1) {
+      this.candidates.splice(index, 1);
+      this.notify();
+      return of({
+        status: 204,
+        message: 'Deleted '+id
+      });
+    }
+    const errorResponse = {
+      status : 404,
+      error : new Error('Not found in getCandidate '+id),
+      message : 'Not found in getCandidate '+id
+    };
+    return throwError(() => errorResponse);
+  }
 
   private getNextId = () => {
     let max : number = 0;
