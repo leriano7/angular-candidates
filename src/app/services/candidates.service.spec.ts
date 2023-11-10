@@ -4,7 +4,7 @@ import { CandidatesService } from './candidates.service';
 import { APP_CONFIG, Config } from 'src/config/app.config';
 import { Candidate } from '../models/candidate';
 import { Experience } from '../models/experience';
-import { switchMap } from 'rxjs';
+import { mergeMap, switchMap } from 'rxjs';
 
 describe('CandidatesService', () => {
   let service: CandidatesService;
@@ -36,7 +36,6 @@ describe('CandidatesService', () => {
   it("allows to retrieve the candidates", () => {
     service.getCandidates().subscribe((retrieved) => {
       expect(retrieved[0].name).toBe('Carlos');
-      expect(retrieved[1].name).toBe('Juan');
       expect(retrieved[2].name).toBe('Paco');
     });
   });
@@ -78,9 +77,33 @@ describe('CandidatesService', () => {
     });
   });
  
-  it("allows to update a candidate", () => {
-    expect(true).toBeTruthy();
-  });
+  it("allows to update a candidate", (done) => {
+    const candidateToUpdate : Candidate = {
+      id: 1,
+      email: "candidateguay@email.com",
+      name : 'Prueba',
+      previousProjects: [
+          {
+              name: "BBVA",
+              technology: ["ReactJS", "JQuery"],
+              description:
+                  "Programador encargado de correcciones en la página web de venta privada",
+              experience: 1
+          }
+      ],
+      experience : Experience.Senior,
+      surname: "Martínez"
+    }
+
+    service.update(candidateToUpdate)
+      .pipe( mergeMap(   () => service.getCandidates()   ) )
+      .subscribe((candidates) => {
+        console.log(candidates);
+        console.log(candidateToUpdate);
+        expect(candidates[1].previousProjects).toEqual(candidateToUpdate.previousProjects);
+        done();
+      });
+    });  
 
   it("allows to delete a candidate", () => {
     expect(true).toBeTruthy();

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Candidate } from '../models/candidate';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 
 @Injectable({
@@ -25,6 +25,24 @@ export class CandidatesService {
     this.candidates.push(savedCandidate);
     this.notify();
     return of(savedCandidate);
+  };
+
+  public update = (candidate : Candidate) : Observable<Candidate> => {
+    if((candidate.id) && (typeof(candidate.id) === 'number')) {
+      // We have a candidate with id to look for...
+      const index = this.candidates.findIndex((c) => c.id === candidate.id);
+      if(index>-1) {
+        const temp = this.candidates[index];
+        this.candidates[index] = Object.assign({},temp,candidate);
+        return of(this.candidates[index]);
+      }
+    }
+    const errorResponse = {
+      status : 404,
+      error : new Error('Not found in update'),
+      message : 'Not found in update'
+    };
+    return throwError(() => errorResponse);
   };
 
   private getNextId = () => {

@@ -51,8 +51,8 @@ export const Config: AppConfig = {
         },
         {
             id: 2,
-            email: "candidate1@email.com",
-            phone: "+34634434312",
+            email: "candidate2@email.com",
+            phone: "+34634434313",
             experience: Experience.Senior,
             name: "Paco",
             previousProjects: [
