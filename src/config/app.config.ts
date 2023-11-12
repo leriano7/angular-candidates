@@ -24,7 +24,8 @@ export const Config: AppConfig = {
                     experience: 1
                 },
             ],
-            surname: "Ruiz Marco"
+            surname: "Ruiz Marco",
+            skills : []
         },
         {
             id: 1,
@@ -47,7 +48,8 @@ export const Config: AppConfig = {
                     experience: 3
                 },
             ],
-            surname: "Martínez"
+            surname: "Martínez",
+            skills : []
         },
         {
             id: 2,
@@ -76,7 +78,9 @@ export const Config: AppConfig = {
                     experience: 3
                 },
             ],
-            surname: "García Olano"
+            surname: "García Olano",
+            skills : ["Amable", "Simpático"]
+
         }
     ]
 };
