@@ -15,6 +15,7 @@ describe('CandidatesService', () => {
     surname: 'López Quintero',
     email: 'correo@correo.com',
     experience: Experience.Senior,
+    skills : [],
     previousProjects: [],
     age: 40
   }];
@@ -63,6 +64,7 @@ describe('CandidatesService', () => {
       surname: 'Rodríguez Fernández',
       email: 'correo2@correo.com',
       experience: Experience.Midlevel,
+      skills : [],
       previousProjects: []
     };
 
@@ -98,6 +100,7 @@ describe('CandidatesService', () => {
         }
       ],
       experience: Experience.Senior,
+      skills : [],
       surname: "Martínez"
     }
 

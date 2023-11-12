@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CandidateListComponent } from './candidate-list.component';
+import { APP_CONFIG, Config } from 'src/config/app.config';
 
 describe('CandidateListComponent', () => {
   let component: CandidateListComponent;
@@ -8,7 +9,11 @@ describe('CandidateListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CandidateListComponent]
+      declarations: [CandidateListComponent],
+      providers : [{
+        provide: APP_CONFIG,
+        useValue: Config
+      }]
     });
     fixture = TestBed.createComponent(CandidateListComponent);
     component = fixture.componentInstance;

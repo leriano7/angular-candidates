@@ -8,18 +8,24 @@ import { CandidateListComponent } from './components/candidate-list/candidate-li
 import { CandidateCardComponent } from './components/candidate-card/candidate-card.component';
 import { AppMaterialModule } from './app-material.module';
 import { APP_CONFIG, Config } from 'src/config/app.config';
+import { CreateCandidateComponent } from './components/create-candidate/create-candidate.component';
+import { CandidateFormComponent } from './components/candidate-form/candidate-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
     CandidateListComponent,
-    CandidateCardComponent
+    CandidateCardComponent,
+    CreateCandidateComponent,
+    CandidateFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AppMaterialModule
+    AppMaterialModule,
+    ReactiveFormsModule
   ],
   providers: [{
     provide: APP_CONFIG,
