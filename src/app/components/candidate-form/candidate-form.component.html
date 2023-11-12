@@ -1,1 +1,4 @@
-<p>candidate-form works!</p>
+<form [formGroup]="candidateForm" class="candidate-form" (ngSubmit)="onSubmit()">
+    <label for="name">Name: </label>
+    <input id="name" type="text" formControlName="name" />
+</form>
