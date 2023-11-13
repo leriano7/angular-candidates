@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/models/candidate';
 import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
@@ -9,20 +9,25 @@ import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
   styleUrls: ['./candidate-form.component.scss'],
   changeDetection : ChangeDetectionStrategy.OnPush
 })
-export class CandidateFormComponent {
+export class CandidateFormComponent implements OnInit {
 
   public candidateForm! : FormGroup;
 
   constructor(private fb: FormBuilder){
     this.candidateForm = this.fb.group({
-      name : ["", Validators.required, Validators.minLength(2)],
-      surname : ["", Validators.required, Validators.minLength(2)],
-      email : ["", Validators.required, Validators.email],
-      phone : ["", Validators.pattern(phonePattern)],
-      linkedIn : ["", Validators.pattern(linkedinPattern)],
-      experience : ["", Validators.required]  
+      name : ["", [Validators.required, Validators.minLength(2)]],
+      surname : ["", [Validators.required, Validators.minLength(2)]],
+      email : ["", [Validators.required, Validators.email]],
+      phone : ["", [Validators.pattern(phonePattern)]],
+      linkedIn : ["", [Validators.pattern(linkedinPattern)]],
+      experience : ["", [Validators.required]],
     });
   }
+  ngOnInit(): void {
+    this.reset();
+  }
+
+  @Input() candidate: Candidate | null = null;
 
   @Output() candidateSubmitter = new EventEmitter<Candidate>();
   @Output() backEmitter = new EventEmitter();
@@ -98,8 +103,8 @@ export class CandidateFormComponent {
   }
 
   public onSubmit = () => {
-    // TODO: we should check here
-    const savedCandidate : Candidate = Object.assign({}, this.candidateForm.value);
+    // TODO: we should check here if all validators are OK?
+    const savedCandidate : Candidate = Object.assign({}, this.candidate, this.candidateForm.value);
     this.candidateSubmitter.emit(savedCandidate);
   };
 
@@ -109,5 +114,17 @@ export class CandidateFormComponent {
 
   public reset = () => {
     this.candidateForm.reset();
+    if (this.candidate) {
+      this.candidateForm.setValue({
+        name: this.candidate.name,
+        surname: this.candidate.surname,
+        email: this.candidate.email,
+        phone: this.candidate.phone ? this.candidate.phone : null,
+        linkedIn: this.candidate.linkedIn ? this.candidate.linkedIn : null,
+        experience: this.candidate.experience,
+      });
+    }
   };
+
+
 }

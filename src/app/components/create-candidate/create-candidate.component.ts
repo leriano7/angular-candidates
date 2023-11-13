@@ -18,7 +18,7 @@ export class CreateCandidateComponent {
     ){}
 
   public onSubmit = (candidate: Candidate) => {
-    // TODO: we should check here
+    // TODO: we should check here if all validators are OK?
     // TO CONSULT: 
     this.service.save(candidate).subscribe(()=>{});
     this.router.navigate(["/"]);

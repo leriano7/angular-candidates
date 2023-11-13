@@ -107,8 +107,6 @@ describe('CandidatesService', () => {
     service.update(candidateToUpdate)
       .pipe(mergeMap(() => service.getCandidates()))
       .subscribe((candidates) => {
-        console.log(candidates);
-        console.log(candidateToUpdate);
         expect(candidates[1].previousProjects).toEqual(candidateToUpdate.previousProjects);
         done();
       });

@@ -11,6 +11,7 @@ import { APP_CONFIG, Config } from 'src/config/app.config';
 import { CreateCandidateComponent } from './components/create-candidate/create-candidate.component';
 import { CandidateFormComponent } from './components/candidate-form/candidate-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditCandidateComponent } from './components/edit-candidate/edit-candidate.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CandidateListComponent,
     CandidateCardComponent,
     CreateCandidateComponent,
-    CandidateFormComponent
+    CandidateFormComponent,
+    EditCandidateComponent
   ],
   imports: [
     BrowserModule,

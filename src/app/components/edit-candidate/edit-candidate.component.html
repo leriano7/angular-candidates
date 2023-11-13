@@ -1,0 +1,7 @@
+<app-candidate-form
+  *ngIf="candidate$ | async as candidate"
+  [candidate]="candidate"
+  (candidateSubmitter)="onSubmit($event)"
+  (backEmitter)="back()"
+>
+</app-candidate-form>
