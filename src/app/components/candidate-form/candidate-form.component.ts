@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/models/candidate';
 import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
 
@@ -21,6 +21,7 @@ export class CandidateFormComponent implements OnInit {
       phone : ["", [Validators.pattern(phonePattern)]],
       linkedIn : ["", [Validators.pattern(linkedinPattern)]],
       experience : ["", [Validators.required]],
+      skills : this.fb.array([])
     });
   }
   ngOnInit(): void {
@@ -102,6 +103,10 @@ export class CandidateFormComponent implements OnInit {
       : "";
   }
 
+  public get skills() {
+    return this.candidateForm.get('skills') as FormArray;
+  }
+
   public onSubmit = () => {
     // TODO: we should check here if all validators are OK?
     const savedCandidate : Candidate = Object.assign({}, this.candidate, this.candidateForm.value);
@@ -115,6 +120,16 @@ export class CandidateFormComponent implements OnInit {
   public reset = () => {
     this.candidateForm.reset();
     if (this.candidate) {
+      const skills = [];
+      if(Array.isArray(this.candidate.skills)) {
+        this.candidate.skills.forEach((skill, index)=>{
+          skills.push(skill); // Add string to array os strings
+          this.addSkill(); // Add control to FormArray
+        });
+      } else {
+        skills.push('');
+        this.addSkill();
+      }
       this.candidateForm.setValue({
         name: this.candidate.name,
         surname: this.candidate.surname,
@@ -122,9 +137,17 @@ export class CandidateFormComponent implements OnInit {
         phone: this.candidate.phone ? this.candidate.phone : null,
         linkedIn: this.candidate.linkedIn ? this.candidate.linkedIn : null,
         experience: this.candidate.experience,
+        skills
       });
     }
   };
 
+  public addSkill = () => {
+    this.skills.push(this.fb.control(''));
+  }
+
+  public removeSkill = (index: number) => {
+    this.skills.removeAt(index);
+  }
 
 }
