@@ -1,1 +1,4 @@
-<app-candidate-form></app-candidate-form>
+<app-candidate-form 
+    (candidateSubmitter)="onSubmit($event)"
+    (backEmitter)="back()">
+</app-candidate-form>

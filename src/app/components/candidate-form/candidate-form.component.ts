@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/models/candidate';
 import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
@@ -6,7 +6,8 @@ import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
 @Component({
   selector: 'app-candidate-form',
   templateUrl: './candidate-form.component.html',
-  styleUrls: ['./candidate-form.component.scss']
+  styleUrls: ['./candidate-form.component.scss'],
+  changeDetection : ChangeDetectionStrategy.OnPush
 })
 export class CandidateFormComponent {
 
@@ -97,6 +98,7 @@ export class CandidateFormComponent {
   }
 
   public onSubmit = () => {
+    // TODO: we should check here
     const savedCandidate : Candidate = Object.assign({}, this.candidateForm.value);
     this.candidateSubmitter.emit(savedCandidate);
   };
