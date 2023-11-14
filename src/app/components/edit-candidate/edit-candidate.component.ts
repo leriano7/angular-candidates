@@ -31,9 +31,7 @@ export class EditCandidateComponent implements OnInit {
   }
 
   public onSubmit = (candidate: Candidate) => {
-    // TODO: we should check here if all validators are OK?
-    // TO CONSULT: 
-    this.candidatesService.update(candidate).subscribe(()=>{});
+    this.candidatesService.update(candidate);
     this.router.navigate(["/"]);
   }
 

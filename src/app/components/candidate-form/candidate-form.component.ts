@@ -13,7 +13,7 @@ export class CandidateFormComponent implements OnInit {
 
   public candidateForm! : FormGroup;
 
-  constructor(private fb: FormBuilder){
+  constructor(private fb: FormBuilder) {
     this.candidateForm = this.fb.group({
       name : ["", [Validators.required, Validators.minLength(2)]],
       surname : ["", [Validators.required, Validators.minLength(2)]],
@@ -108,7 +108,6 @@ export class CandidateFormComponent implements OnInit {
   }
 
   public onSubmit = () => {
-    // TODO: we should check here if all validators are OK?
     const savedCandidate : Candidate = Object.assign({}, this.candidate, this.candidateForm.value);
     this.candidateSubmitter.emit(savedCandidate);
   };
