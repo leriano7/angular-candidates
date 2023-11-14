@@ -39,7 +39,7 @@ export class CandidatesService {
   };
 
   public update = (candidate : Candidate) : Observable<Candidate> => {
-    if((candidate.id) && (typeof(candidate.id) === 'number')) {
+    if (typeof(candidate.id) === 'number') {
       // We have a candidate with id to look for...
       const index = this.candidates.findIndex((c) => c.id === candidate.id);
       if(index>-1) {
