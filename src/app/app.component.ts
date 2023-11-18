@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { fromEvent, scan } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,15 +9,17 @@ import { fromEvent } from 'rxjs';
 export class AppComponent implements OnInit {
 
   public title = 'angular-101-day3';
-  private count = 0;
+  //private count = 0;
 
   ngOnInit(): void {
-    //fromEvent(document, "click").subscribe(()=>console.log('Clicked!'));
+
     document.addEventListener("click",()=>{
-      // This is not a pure function. It depends on an external variable
-      // console.log("Clicked " + this.count++);
-      console.log(`Clicked ${this.count++}`);
+      // This is a pure function. It doesnt depend on an external variable.
+      // scan is inspired in Array.reduce -> scan all events and keeps a value.
+      // Takes a value and returns that value with transformation.
+      fromEvent(document, "click")
+        .pipe( scan(   (count)=> count + 1 , 0  ) )
+        .subscribe(   (count) => console.log(`Clicked ${count}`)   );
     });
   }
-
 }
