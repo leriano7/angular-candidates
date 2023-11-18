@@ -13,6 +13,7 @@ import { CandidateFormComponent } from './components/candidate-form/candidate-fo
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditCandidateComponent } from './components/edit-candidate/edit-candidate.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
     AppRoutingModule,
     BrowserAnimationsModule,
     AppMaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [{
     provide: APP_CONFIG,
