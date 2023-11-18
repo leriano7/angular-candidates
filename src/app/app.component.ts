@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fromEvent, scan, throttleTime } from 'rxjs';
+import { fromEvent, map, scan, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -22,9 +22,14 @@ export class AppComponent implements OnInit {
 
   // pipe takes a list of params. throttle times -> purity + flow
   // throttleTime avoids observable emission during time in milliseconds.
+  // map (Array) -> map (rxjs)
+  // reduce (Array) -> scan (rxjs)
   ngOnInit(): void {
     fromEvent(document, "click")
-      .pipe( throttleTime(1000) , scan(   (count) => count + 1, 0   ) )
-      .subscribe( (count) => console.log(`Clicked ${count} times`) );
+      .pipe( // Transformaciones u observables de nivel superior.
+        throttleTime(1000) ,
+        map(   (event: any) => event.clientX   ) ,
+        scan(   (count, clientX) => count + clientX, 0   )
+      ).subscribe( (count) => console.log(`Clicked ${count} X`) );
   }
 }
