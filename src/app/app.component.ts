@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fromEvent, map, scan, throttleTime } from 'rxjs';
+import { first, fromEvent, map, of, scan, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -31,5 +31,25 @@ export class AppComponent implements OnInit {
         map(   (event: any) => event.clientX   ) ,
         scan(   (count, clientX) => count + clientX, 0   )
       ).subscribe( (count) => console.log(`Clicked ${count} X`) );
+
+      this.playWithObservables();
   }
+
+
+
+  private playWithObservables = () => {
+
+    const names = of('Ismael', 'L', 'Q');
+
+
+    names.pipe( first() ).subscribe((value)=>{
+      console.log('El primero es '+ value);
+    });
+
+
+
+
+
+
+  };
 }
