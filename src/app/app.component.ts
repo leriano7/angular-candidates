@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { first, fromEvent, of, map, scan, throttleTime, take, last, filter } from 'rxjs';
+import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -26,37 +26,52 @@ export class AppComponent implements OnInit {
   // reduce (Array) -> scan (rxjs)
   ngOnInit(): void {
     fromEvent(document, "click")
-      .pipe( // Transformaciones u observables de nivel superior.
-        throttleTime(1000) ,
-        map(   (event: any) => event.clientX   ) ,
-        scan(   (count, clientX) => count + clientX, 0   )
-      ).subscribe( (count) => console.log(`Clicked ${count} X`) );
-
-      this.playWithObservables();
+      .pipe( // Transformations or high order observables
+        throttleTime(1000),
+        map((event: any) => event.clientX),
+        scan((count, clientX) => count + clientX, 0)
+      ).subscribe((count) => console.log(`Clicked ${count} X`));
+    this.playWithObservables();
   }
-
 
   private playWithObservables = () => {
     const names = of('Ismael', 'L', 'Q');
-    names.pipe( first() ).subscribe((value)=>{
-      console.log('El primero es '+ value);
-    });
-    names.pipe( take(2) ).subscribe((value)=>{
-      console.log('Take '+ value);
+
+    names.pipe(first()).subscribe((value) => {
+      console.log('El primero es ' + value);
     });
 
-    names.pipe( last() ).subscribe((value)=>{
-      console.log('El último es '+ value);
+    names.pipe(take(2)).subscribe((value) => {
+      console.log('Take ' + value);
     });
 
-    names.pipe( filter( (value: string)=>value.startsWith('Q') ) ).subscribe((value)=>{
-      console.log('Empieza por Q '+ value);
+    names.pipe(last()).subscribe((value) => {
+      console.log('El último es ' + value);
     });
-    /* Expected execution
+
+    names.pipe(filter((value: string) => value.startsWith('Q'))).subscribe((value) => {
+      console.log('Empieza por Q ' + value);
+    });
+    /* --- Expected execution ---
       El primero es Ismael
       Take Ismael
       Take L
       El último es Q
+      Empieza por Q Q
     */
+    // const letters = of('a', 'b', 'c');
+    // letters.pipe(
+    //   mergeMap(x => interval(1000).pipe(map(i => x + i))) // takes a , b , c
+    //   // switchMap(x => interval(1000).pipe(map(i => x + i))) // Only takes c
+    // ).subscribe(value => console.log('El valor es '+ value));
+
+    // emit value every 1s
+    const source = interval(1000);
+    // after 5 seconds, emit value
+    const timer$ = timer(5000);
+    // when timer emits after 5s, complete source
+    const example = source.pipe(takeUntil(timer$));
+    // output: 0,1,2,3
+    const subscribe = example.subscribe(val => console.log(val));
   };
 }
