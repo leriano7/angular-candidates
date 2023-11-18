@@ -12,14 +12,11 @@ export class AppComponent implements OnInit {
   //private count = 0;
 
   ngOnInit(): void {
-
-    document.addEventListener("click",()=>{
-      // This is a pure function. It doesnt depend on an external variable.
-      // scan is inspired in Array.reduce -> scan all events and keeps a value.
-      // Takes a value and returns that value with transformation.
-      fromEvent(document, "click")
-        .pipe( scan(   (count)=> count + 1 , 0  ) )
-        .subscribe(   (count) => console.log(`Clicked ${count}`)   );
-    });
+    // This is a pure function. It doesnt depend on an external variable.
+    // scan is inspired in Array.reduce -> scan all events and keeps a value.
+    // Takes a value and returns that value with transformation.
+    fromEvent(document, "click")
+      .pipe(scan((count) => count + 1, 0))
+      .subscribe((count) => console.log(`Clicked ${count}`));
   }
 }
