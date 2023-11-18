@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { first, fromEvent, map, of, scan, throttleTime } from 'rxjs';
+import { first, fromEvent, of, map, scan, throttleTime, take, last, filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -36,20 +36,27 @@ export class AppComponent implements OnInit {
   }
 
 
-
   private playWithObservables = () => {
-
     const names = of('Ismael', 'L', 'Q');
-
-
     names.pipe( first() ).subscribe((value)=>{
       console.log('El primero es '+ value);
     });
+    names.pipe( take(2) ).subscribe((value)=>{
+      console.log('Take '+ value);
+    });
 
+    names.pipe( last() ).subscribe((value)=>{
+      console.log('El último es '+ value);
+    });
 
-
-
-
-
+    names.pipe( filter( (value: string)=>value.startsWith('Q') ) ).subscribe((value)=>{
+      console.log('Empieza por Q '+ value);
+    });
+    /* Expected execution
+      El primero es Ismael
+      Take Ismael
+      Take L
+      El último es Q
+    */
   };
 }
