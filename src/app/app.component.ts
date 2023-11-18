@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { fromEvent, scan } from 'rxjs';
+import { fromEvent, scan, throttleTime } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -20,18 +20,11 @@ export class AppComponent implements OnInit {
   //     .subscribe((count) => console.log(`Clicked ${count}`));
   // }
 
-  // Temp flow without observables
+  // pipe takes a list of params. throttle times -> purity + flow
+  // throttleTime avoids observable emission during time in milliseconds.
   ngOnInit(): void {
-    let count = 0;
-    let rate = 1000;
-    let lastClick = Date.now();
-    console.log('1 ' + lastClick);
-    document.addEventListener("click",()=>{
-      if(Date.now() - lastClick >= rate) {
-        console.log(`Clicked ${count++}`);
-        lastClick = Date.now();
-        console.log('2 ' + lastClick);
-      }
-    });
+    fromEvent(document, "click")
+      .pipe( throttleTime(1000) , scan(   (count) => count + 1, 0   ) )
+      .subscribe( (count) => console.log(`Clicked ${count} times`) );
   }
 }
