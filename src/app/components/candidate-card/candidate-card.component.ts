@@ -22,14 +22,14 @@ export class CandidateCardComponent implements OnInit {
     this.seniority.senior = this.candidate?.experience === 'Senior';
     this.buildUniqueSkills();
   }
-  
+
   @Input() candidate! : Candidate;
 
   public skills : {
     technology: string,
     experience: number
   } [] = [];
-  
+
   public seniority = {
     junior: false,
     mid: false,
@@ -37,22 +37,22 @@ export class CandidateCardComponent implements OnInit {
   };
 
   private buildUniqueSkills = () => {
-    if(this.candidate && Array.isArray(this.candidate.previousProjects)) {      
+    if(this.candidate && Array.isArray(this.candidate.previousProjects)) {
       // We define a new block function (to use only here).
       // This function returns true if not found or found in given index.
       const onlyUnique = (
-        value : { technology: string, experience:number }, 
-        index: number, 
-        self : { technology: string, experience:number }[]) : Boolean => {          
+        value : { technology: string, experience:number },
+        index: number,
+        self : { technology: string, experience:number }[]) : Boolean => {
           const found = self.findIndex((v : { technology: string, experience:number }) =>
             // Must include the >"=" to avoid duplication of the same value.
             v.technology === value.technology && v.experience >= value.experience
           );
-          console.log('========> Ejecución');
-          console.log('value => '+JSON.stringify(value));
-          console.log('index => '+index);
-          console.log('self => '+JSON.stringify(self));
-          console.log('found => '+JSON.stringify(found));
+          //console.log('========> Ejecución');
+          //console.log('value => '+JSON.stringify(value));
+          //console.log('index => '+index);
+          //console.log('self => '+JSON.stringify(self));
+          //console.log('found => '+JSON.stringify(found));
           return found === -1 || found === index;
       };
 

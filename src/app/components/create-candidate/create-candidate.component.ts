@@ -1,6 +1,7 @@
 import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { Candidate } from 'src/app/models/candidate';
 import { CandidatesService } from 'src/app/services/candidates.service';
 
@@ -18,7 +19,7 @@ export class CreateCandidateComponent {
     ){}
 
   public onSubmit = (candidate: Candidate) => {
-    this.service.save(candidate);
+    this.service.save(candidate).pipe(take(1)).subscribe();
     this.router.navigate(["/"]);
   }
 

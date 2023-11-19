@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, take } from "rxjs";
 import { Candidate } from "src/app/models/candidate";
 import { CandidatesService } from "src/app/services/candidates.service";
 
@@ -31,7 +31,7 @@ export class EditCandidateComponent implements OnInit {
   }
 
   public onSubmit = (candidate: Candidate) => {
-    this.candidatesService.update(candidate);
+    this.candidatesService.update(candidate).pipe(take(1)).subscribe();
     this.router.navigate(["/"]);
   }
 

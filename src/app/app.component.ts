@@ -25,12 +25,14 @@ export class AppComponent implements OnInit {
   // map (Array) -> map (rxjs)
   // reduce (Array) -> scan (rxjs)
   ngOnInit(): void {
+    /*
     fromEvent(document, "click")
       .pipe( // Transformations or high order observables
         throttleTime(1000),
         map((event: any) => event.clientX),
         scan((count, clientX) => count + clientX, 0)
       ).subscribe((count) => console.log(`Clicked ${count} X`));
+    */
     this.playWithObservables();
   }
 
@@ -38,19 +40,19 @@ export class AppComponent implements OnInit {
     const names = of('Ismael', 'L', 'Q');
 
     names.pipe(first()).subscribe((value) => {
-      console.log('El primero es ' + value);
+      //console.log('El primero es ' + value);
     });
 
     names.pipe(take(2)).subscribe((value) => {
-      console.log('Take ' + value);
+      //console.log('Take ' + value);
     });
 
     names.pipe(last()).subscribe((value) => {
-      console.log('El último es ' + value);
+      //console.log('El último es ' + value);
     });
 
     names.pipe(filter((value: string) => value.startsWith('Q'))).subscribe((value) => {
-      console.log('Empieza por Q ' + value);
+      //console.log('Empieza por Q ' + value);
     });
     /* --- Expected execution ---
       El primero es Ismael

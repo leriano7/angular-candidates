@@ -24,10 +24,13 @@ export class CandidatesService {
   }
 
   public save = (candidate: Candidate): Observable<Candidate> => {
+    console.log('SAVE =============> ');
     return this.getNextId()
       .pipe(
+        take(1),
         switchMap( (value) =>
           {
+            console.log('SAVE recibido =============> ' + value);
             candidate.id = value;
             return this.http.post<Candidate>(
               `${this.api}/candidates`,
@@ -65,9 +68,13 @@ export class CandidatesService {
   }
 
   private getNextId = (): Observable<number> => {
+    // Not working OK
+    // let obs = new Observable<number>().toPromise();
+    console.log('GNI ============> ');
     this.getCandidates()
       .pipe(take(1))
       .subscribe((candidates) => {
+        console.log('GNI ============> '+ JSON.stringify(candidates));
         let max: number = 0;
         if (candidates) {
           for (let i in candidates) {
@@ -78,6 +85,7 @@ export class CandidatesService {
             }
           }
         }
+        console.log('GNI returns ============> '+ (max+1));
         this.idsBeahvior.next(max + 1);
       });
     return this.idsBeahvior;
