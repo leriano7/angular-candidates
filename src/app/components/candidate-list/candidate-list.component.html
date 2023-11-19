@@ -1,7 +1,7 @@
 <div class="add-button">
-    <button 
-        mat-fab 
-        color="primary" 
+    <button
+        mat-fab
+        color="primary"
         aria-label="Añadir un candidato"
         routerLink="/create">
         <mat-icon>add</mat-icon>
@@ -9,6 +9,8 @@
 </div>
 <div class="candidate-list">
     <div *ngFor="let candidate of candidates">
-        <app-candidate-card [candidate]="candidate"></app-candidate-card>
+        <app-candidate-card
+          [candidate]="candidate"
+          (outDestroy)="deletedCard()"></app-candidate-card>
     </div>
 </div>

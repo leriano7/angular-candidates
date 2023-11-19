@@ -40,19 +40,19 @@ export class AppComponent implements OnInit {
     const names = of('Ismael', 'L', 'Q');
 
     names.pipe(first()).subscribe((value) => {
-      //console.log('El primero es ' + value);
+      console.log('El primero es ' + value);
     });
 
     names.pipe(take(2)).subscribe((value) => {
-      //console.log('Take ' + value);
+      console.log('Take ' + value);
     });
 
     names.pipe(last()).subscribe((value) => {
-      //console.log('El último es ' + value);
+      console.log('El último es ' + value);
     });
 
     names.pipe(filter((value: string) => value.startsWith('Q'))).subscribe((value) => {
-      //console.log('Empieza por Q ' + value);
+      console.log('Empieza por Q ' + value);
     });
     /* --- Expected execution ---
       El primero es Ismael
@@ -74,6 +74,6 @@ export class AppComponent implements OnInit {
     // when timer emits after 5s, complete source
     const example = source.pipe(takeUntil(timer$));
     // output: 0,1,2,3
-    const subscribe = example.subscribe(val => console.log(val));
+    example.subscribe(val => console.log(val));
   };
 }

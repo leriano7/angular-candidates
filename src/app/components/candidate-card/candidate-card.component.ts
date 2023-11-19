@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Candidate } from 'src/app/models/candidate';
 import { CandidatesService } from 'src/app/services/candidates.service';
@@ -15,6 +15,8 @@ export class CandidateCardComponent implements OnInit {
     public dialog: MatDialog,
     private candidateService: CandidatesService
   ) {}
+
+  @Output() outDestroy = new EventEmitter<number>();
 
   ngOnInit(): void {
     this.seniority.junior = this.candidate?.experience === 'Junior';
@@ -48,11 +50,11 @@ export class CandidateCardComponent implements OnInit {
             // Must include the >"=" to avoid duplication of the same value.
             v.technology === value.technology && v.experience >= value.experience
           );
-          //console.log('========> Ejecución');
-          //console.log('value => '+JSON.stringify(value));
-          //console.log('index => '+index);
-          //console.log('self => '+JSON.stringify(self));
-          //console.log('found => '+JSON.stringify(found));
+          console.log('========> Ejecución');
+          console.log('value => '+JSON.stringify(value));
+          console.log('index => '+index);
+          console.log('self => '+JSON.stringify(self));
+          console.log('found => '+JSON.stringify(found));
           return found === -1 || found === index;
       };
 
@@ -79,7 +81,9 @@ export class CandidateCardComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       if (result) {
-        this.candidateService.remove(result.id).subscribe(()=>{});
+        this.candidateService.remove(result.id).subscribe(()=>{
+          this.outDestroy.emit(0);
+        });
       }
     });
   };

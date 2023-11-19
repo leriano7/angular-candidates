@@ -19,8 +19,9 @@ export class CreateCandidateComponent {
     ){}
 
   public onSubmit = (candidate: Candidate) => {
-    this.service.save(candidate).pipe(take(1)).subscribe();
-    this.router.navigate(["/"]);
+    this.service.save(candidate).pipe(take(1)).subscribe(() => {
+      this.router.navigate(["/"]);
+    });
   }
 
   public back = () => {

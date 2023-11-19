@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Candidate } from 'src/app/models/candidate';
 import { CandidatesService } from 'src/app/services/candidates.service';
@@ -11,13 +11,9 @@ import { CandidatesService } from 'src/app/services/candidates.service';
 export class CandidateListComponent implements OnInit, OnDestroy {
 
   constructor(public service: CandidatesService) {}
-  
+
   ngOnInit(): void {
-    const subscription = this.service
-        .getCandidates().subscribe((candidates) => { 
-          this.candidates = candidates
-        });
-    this.subscriptions.push(subscription);
+    this.drawList();
   }
 
   ngOnDestroy(): void {
@@ -25,8 +21,20 @@ export class CandidateListComponent implements OnInit, OnDestroy {
       s.unsubscribe();
     });
   }
-  
+
   public candidates: Candidate[] = [];
   public subscriptions: Subscription[] = [];
+
+  public deletedCard = () => {
+    this.drawList();
+  };
+
+  private drawList() {
+    const subscription = this.service
+        .getCandidates().subscribe((candidates) => {
+          this.candidates = candidates
+        });
+    this.subscriptions.push(subscription);
+  }
 
 }

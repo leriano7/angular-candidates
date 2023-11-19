@@ -9,11 +9,8 @@ import { HttpClient } from '@angular/common/http';
 export class CandidatesService {
 
   private api = "http://ubuntuserver:3000/api";
-  private idsBeahvior: BehaviorSubject<number>;
 
-  constructor(private http: HttpClient) {
-    this.idsBeahvior = new BehaviorSubject<number>(0);
-  }
+  constructor(private http: HttpClient) {}
 
   public getCandidates = (): Observable<Candidate[]> => {
     return this.http.get<Candidate[]>(`${this.api}/candidates`);
@@ -24,24 +21,20 @@ export class CandidatesService {
   }
 
   public save = (candidate: Candidate): Observable<Candidate> => {
-    console.log('SAVE =============> ');
     return this.getNextId()
       .pipe(
-        take(1),
-        switchMap( (value) =>
-          {
-            console.log('SAVE recibido =============> ' + value);
-            candidate.id = value;
-            return this.http.post<Candidate>(
-              `${this.api}/candidates`,
-              candidate, {
+        switchMap((nextId) => {
+          candidate.id = nextId;
+          return this.http.post<Candidate>(
+            `${this.api}/candidates`,
+            candidate, {
               headers: {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
               }
-            })
-          }
-        )
+            }
+          )
+        })
       );
   };
 
@@ -68,26 +61,23 @@ export class CandidatesService {
   }
 
   private getNextId = (): Observable<number> => {
-    // Not working OK
-    // let obs = new Observable<number>().toPromise();
-    console.log('GNI ============> ');
-    this.getCandidates()
-      .pipe(take(1))
-      .subscribe((candidates) => {
-        console.log('GNI ============> '+ JSON.stringify(candidates));
-        let max: number = 0;
-        if (candidates) {
-          for (let i in candidates) {
-            const thisCandidate = candidates[i];
-            const thisId = thisCandidate.id ? thisCandidate.id : 0;
-            if (thisId > max) {
-              max = thisId;
+    return new Observable<number>((observer) => {
+      this.getCandidates()
+        .pipe(take(1))
+        .subscribe((candidates) => {
+          let max: number = 0;
+          if (candidates) {
+            for (let i in candidates) {
+              const thisCandidate = candidates[i];
+              const thisId = thisCandidate.id ? thisCandidate.id : 0;
+              if (thisId > max) {
+                max = thisId;
+              }
             }
           }
-        }
-        console.log('GNI returns ============> '+ (max+1));
-        this.idsBeahvior.next(max + 1);
-      });
-    return this.idsBeahvior;
+          observer.next(max+1);
+          observer.complete();
+        });
+    });
   };
 }

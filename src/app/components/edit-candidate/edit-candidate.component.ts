@@ -31,8 +31,9 @@ export class EditCandidateComponent implements OnInit {
   }
 
   public onSubmit = (candidate: Candidate) => {
-    this.candidatesService.update(candidate).pipe(take(1)).subscribe();
-    this.router.navigate(["/"]);
+    this.candidatesService.update(candidate).pipe(take(1)).subscribe(() => {
+      this.router.navigate(["/"]);
+    });
   }
 
   public back = () => {
