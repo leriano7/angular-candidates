@@ -13,8 +13,9 @@ import { CandidateFormComponent } from './components/candidate-form/candidate-fo
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditCandidateComponent } from './components/edit-candidate/edit-candidate.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
+import { AuthInterceptor } from './auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -37,8 +38,12 @@ import { LoginComponent } from './components/login/login.component';
   ],
   providers: [{
     provide: APP_CONFIG,
-    useValue: Config,
-  },],
+    useValue: Config
+  },{
+    provide : HTTP_INTERCEPTORS,
+    useClass : AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
