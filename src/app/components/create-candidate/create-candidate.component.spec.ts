@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreateCandidateComponent } from './create-candidate.component';
 import { APP_CONFIG, Config } from 'src/config/app.config';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('CreateCandidateComponent', () => {
   let component: CreateCandidateComponent;
@@ -10,6 +11,7 @@ describe('CreateCandidateComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports : [HttpClientTestingModule],
       declarations: [CreateCandidateComponent],
       providers : [{
         provide: APP_CONFIG,

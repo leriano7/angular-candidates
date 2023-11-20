@@ -7,6 +7,7 @@ import { Experience } from 'src/app/models/experience';
 import { APP_CONFIG, Config } from 'src/config/app.config';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 let loader : HarnessLoader;
 
@@ -17,7 +18,7 @@ describe('CandidateCardComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [CandidateCardComponent],
-      imports : [AppMaterialModule, NoopAnimationsModule],
+      imports : [AppMaterialModule, NoopAnimationsModule, HttpClientTestingModule],
       providers : [{
         provide: APP_CONFIG,
         useValue: Config,

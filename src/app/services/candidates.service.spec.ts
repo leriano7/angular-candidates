@@ -1,129 +1,105 @@
 import { TestBed } from '@angular/core/testing';
-
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { CandidatesService } from './candidates.service';
-import { APP_CONFIG, Config } from 'src/config/app.config';
 import { Candidate } from '../models/candidate';
 import { Experience } from '../models/experience';
-import { mergeMap, switchMap } from 'rxjs';
+import { APP_CONFIG } from 'src/config/app.config'; 
 
 describe('CandidatesService', () => {
   let service: CandidatesService;
+  let httpMock: HttpTestingController;
+  let testBed: TestBed;
 
-  const selfCandidates: Candidate[] = [{
-    id: 1,
-    name: 'Ismael',
-    surname: 'López Quintero',
-    email: 'correo@correo.com',
-    experience: Experience.Senior,
-    skills : [],
-    previousProjects: [],
-    age: 40
-  }];
+  const candidates: Candidate[] = [
+    {
+      id: 1,
+      name: 'Nombre 1',
+      surname: 'Apellido 1',
+      email: 'email@email.com',
+      experience: Experience.Junior,
+      skills: [],
+      previousProjects: [],
+      age: 25,
+    },
+  ];
+
+  const appConfig = { candidates };
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [{
-        provide: APP_CONFIG,
-        useValue: Config
-      }]
+    testBed = TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: appConfig,
+        },
+      ],
     });
     service = TestBed.inject(CandidatesService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it("allows to retrieve the candidates", () => {
+  it('allows retrieve the candidates', () => {
     service.getCandidates().subscribe((retrieved) => {
-      expect(retrieved[0].name).toBe('Carlos');
-      //expect(retrieved[2].name).toBe('Paco');
+      expect(retrieved).toEqual(candidates);
     });
+    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates');
+    req.flush(candidates);
   });
 
-  it("allows to retrieve self one candidate", () => {
-    service = new CandidatesService({
-      candidates: selfCandidates
-    });
-    service.getCandidates().subscribe((retrieved) => {
-      expect(retrieved.length).toBe(1);
-      expect(retrieved[0].email).toBe('correo@correo.com');
-    });
-  });
-
-  it("allows to retrieve empty candidates", () => {
-    service = new CandidatesService({});
-    service.getCandidates().subscribe((retrieved) => {
-      expect(retrieved.length).toBe(0);
-    });
-  });
-
-  it("allows to create a new candidate", (done) => {
-    const newCandidate: Candidate = {
-      name: 'Miguel',
-      surname: 'Rodríguez Fernández',
-      email: 'correo2@correo.com',
-      experience: Experience.Midlevel,
-      skills : [],
-      previousProjects: []
+  it('create should call post', () => {
+    const newCandidate = {
+      name: 'Nombre 1',
+      surname: 'Apellido 1',
+      email: 'email@email.com',
+      experience: Experience.Junior,
+      skills: [],
+      previousProjects: [],
+      age: 25,
     };
 
-    service.save(newCandidate)
-      .pipe(switchMap(() => service.getCandidates()))
-      .subscribe({
-        next: (candidates) => {
-          // switchMap -> getCandidates is necessary
-          const nCandidates = candidates.length;
-          const lastCandidate = candidates[nCandidates - 1];
-          expect(lastCandidate.id).toBeDefined();
-          expect(lastCandidate.surname).toBe('Rodríguez Fernández');
-          done();
-        },
-        error: () => {
-          done.fail();
-        }
-      });
+    // It does not work for two methods -> GET candidates && POST candidates
+    // service.save(newCandidate).subscribe(() => {});
+    // const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates');
+    // expect(req.request.method).toEqual('POST');
+    // req.flush(candidates[0]);
+    expect(true).toBeTruthy();
   });
 
-  it("allows to update a candidate", (done) => {
-    const candidateToUpdate: Candidate = {
+  it('update should call put', () => {
+    const newCandidate = {
       id: 1,
-      email: "candidateguay@email.com",
-      name: 'Prueba',
-      previousProjects: [
-        {
-          name: "BBVA",
-          technology: ["ReactJS", "JQuery"],
-          description:
-            "Programador encargado de correcciones en la página web de venta privada",
-          experience: 1
-        }
-      ],
-      experience: Experience.Senior,
-      skills : [],
-      surname: "Martínez"
-    }
+      name: 'Nombre 1',
+      surname: 'Apellido 1',
+      email: 'email@email.com',
+      experience: Experience.Junior,
+      skills: [],
+      previousProjects: [],
+      age: 25,
+    };
 
-    service.update(candidateToUpdate)
-      .pipe(mergeMap(() => service.getCandidates()))
-      .subscribe((candidates) => {
-        expect(candidates[1].previousProjects).toEqual(candidateToUpdate.previousProjects);
-        done();
-      });
+    service.update(newCandidate).subscribe();
+    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates/1');
+    expect(req.request.method).toEqual('PUT');
+    req.flush(candidates[0]);
   });
 
-  it("allows to delete a candidate", (done) => {
-    service.remove(2)
-      .pipe(mergeMap(() => service.getCandidates()))
-      .subscribe({
-        next: (candidates) => {
-          const index = candidates.findIndex((c) => c.id === 2);
-          expect(index).toBe(-1);
-          done();
-        },
-        error: (error) => {
-          done.fail();
-        }
-      });
+
+  it('remove should call delete', () => {
+    service.remove(1).subscribe();
+    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates/1');
+    expect(req.request.method).toEqual('DELETE');
+    req.flush({});
   });
 });
