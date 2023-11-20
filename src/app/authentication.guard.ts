@@ -1,9 +1,16 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
 
-export const authenticationGuard: CanActivateFn = (route, state) => {
-  // It must return boolean, Promise<boolean> or Observable<boolean>
+export const authenticationGuard: CanActivateFn = () => {
+  const router = inject(Router);
+  // Coherción a booleano.
+  // Esto quiere decir que si es distinto de nulo, será verdadero.
+  // Si es nulo, será falso.
+  if (!!localStorage.getItem('token')) {
+    return true;
+  }
 
+  // ¿Diferencia entre parseUrl y navigate?
 
-
-  return true;
+  return router.parseUrl('/login');
 };

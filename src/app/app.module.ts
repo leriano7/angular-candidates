@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { EditCandidateComponent } from './components/edit-candidate/edit-candidate.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     CreateCandidateComponent,
     CandidateFormComponent,
     EditCandidateComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { CandidateListComponent } from './components/candidate-list/candidate-li
 import { CreateCandidateComponent } from './components/create-candidate/create-candidate.component';
 import { EditCandidateComponent } from './components/edit-candidate/edit-candidate.component';
 import { authenticationGuard } from './authentication.guard';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
     canActivate : [authenticationGuard],
     component: EditCandidateComponent,
   },
+  {
+    path : "login",
+    component : LoginComponent
+  }
 ];
 
 @NgModule({
