@@ -21,13 +21,27 @@ export class EditCandidateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    debugger;
     this.candidate$ = this.activatedRoute.paramMap.pipe(
       switchMap((params) => {
         // 10 is the base of the number
         const selectedId = parseInt(params.get("id")!, 10);
-        return this.candidatesService.getCandidate(selectedId);
+        //return this.candidatesService.getCandidate(selectedId);
+        return new Observable<Candidate>((observer)=>{
+          if(!isNaN(selectedId)) {
+            // It is number
+            this.candidatesService.getCandidate(selectedId).subscribe({
+              next : (candidate: Candidate) => observer.next(candidate),
+              error : () => this.router.navigate(["/"])
+            });
+          } else {
+            // It is not a number
+            this.router.navigate(["/"])
+          }          
+        });
       })
     );
+    
   }
 
   public onSubmit = (candidate: Candidate) => {
