@@ -113,6 +113,8 @@ export class CandidateFormComponent implements OnInit {
   }
 
   public onSubmit = () => {
+    const newSkills = this.cleanBlankSkills(this.candidateForm.value.skills);
+    this.candidateForm.value.skills = newSkills;
     const savedCandidate: Candidate = Object.assign(
       {},
       this.candidate,
@@ -159,4 +161,10 @@ export class CandidateFormComponent implements OnInit {
   public removeSkill = (index: number) => {
     this.skills.removeAt(index);
   };
+
+  private cleanBlankSkills(skills: Array<string>) : Array<string> {
+    return skills.filter((thisSkill) => {
+      return (thisSkill.trim().length > 0);
+    });
+  }
 }
