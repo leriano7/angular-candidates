@@ -25,9 +25,21 @@ export class EditCandidateComponent implements OnInit {
       switchMap((params) => {
         // 10 is the base of the number
         const selectedId = parseInt(params.get("id")!, 10);
-        return this.candidatesService.getCandidate(selectedId);
+        return new Observable<Candidate>((observer)=>{
+          if(!isNaN(selectedId)) {
+            // It is a number.
+            this.candidatesService.getCandidate(selectedId).pipe(take(1)).subscribe({
+              next : (candidate: Candidate) => observer.next(candidate),
+              error : () => this.router.navigate(["/"])
+            });
+          } else {
+            // It is not a number.
+            this.router.navigate(["/"])
+          }          
+        });
       })
     );
+    
   }
 
   public onSubmit = (candidate: Candidate) => {

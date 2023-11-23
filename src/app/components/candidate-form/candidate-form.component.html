@@ -37,7 +37,6 @@
     <div formArrayName="skills" class="full">
         <h2>Skills</h2>
         <button mat-raised-button color="primary" type="button" (click)="addSkill()">+ Add another skill</button>
-
         <mat-form-field class="full" *ngFor="let skill of skills.controls; let i = index">
             <!-- The repeated alias template -->
             <mat-label>Skill</mat-label>
