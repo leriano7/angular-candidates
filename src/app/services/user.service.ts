@@ -27,7 +27,7 @@ export class UserService {
   }
 
   public logout = () : void => {
-    localStorage.clear();
+    localStorage.removeItem('token');
   };
 
   public isLogged = () : Boolean => {

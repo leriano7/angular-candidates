@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RequestAuth } from "src/app/models/request-auth";
@@ -12,6 +12,7 @@ import { UserService } from "src/app/services/user.service";
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  public loginEvent = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +28,9 @@ export class LoginComponent {
   submit() {
     if (this.loginForm.valid) {
       const creds = this.loginForm.value as RequestAuth;
+      // TODO: we must work with error
       this.service.login(creds).subscribe((user: User) => {
+        this.loginEvent.emit();
         this.router.navigate(["/"]);
       });
     }

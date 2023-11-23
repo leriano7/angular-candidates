@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil } from 'rxjs';
+import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil, Subscription } from 'rxjs';
+import { LoginComponent } from './components/login/login.component';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +10,45 @@ import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, merg
 })
 export class AppComponent implements OnInit {
 
+  constructor(private userService: UserService) {}
+
   public title = 'angular-101-day3';
+  public isLoggedIn! : Boolean;
+
+  private subscription : Subscription | null = null;
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.userService.isLogged();
+  }
+
+  public logoutClass = () => {
+    // Object notation
+    return {
+      "hidden-link" : !this.isLoggedIn
+    }
+  };
+
+  public subscribeToLoginEvent(componentRef: any) {
+    if(componentRef instanceof LoginComponent) {
+      this.subscription = (componentRef as LoginComponent)
+          .loginEvent.subscribe(()=> {
+            this.isLoggedIn = this.userService.isLogged();
+          });
+    }
+  }
+
+  public unsubscribeFromLoginEvent() {
+    if(this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+    }
+  }
+
+  public logout = () => {
+    this.userService.logout();
+    this.isLoggedIn = this.userService.isLogged();
+  }
+
   //private count = 0;
 
   // ngOnInit(): void {
@@ -24,7 +64,8 @@ export class AppComponent implements OnInit {
   // throttleTime avoids observable emission during time in milliseconds.
   // map (Array) -> map (rxjs)
   // reduce (Array) -> scan (rxjs)
-  ngOnInit(): void {
+  /*
+  ngOnInit(): void {}
     /*
     fromEvent(document, "click")
       .pipe( // Transformations or high order observables
@@ -33,9 +74,11 @@ export class AppComponent implements OnInit {
         scan((count, clientX) => count + clientX, 0)
       ).subscribe((count) => console.log(`Clicked ${count} X`));
     */
-    this.playWithObservables();
-  }
+    //this.playWithObservables();
+  //}
+  //
 
+  /*
   private playWithObservables = () => {
     const names = of('Ismael', 'L', 'Q');
 
@@ -61,6 +104,7 @@ export class AppComponent implements OnInit {
       El último es Q
       Empieza por Q Q
     */
+   /*
     // const letters = of('a', 'b', 'c');
     // letters.pipe(
     //   mergeMap(x => interval(1000).pipe(map(i => x + i))) // takes a , b , c
@@ -76,4 +120,5 @@ export class AppComponent implements OnInit {
     // output: 0,1,2,3
     example.subscribe(val => console.log(val));
   };
+  */
 }

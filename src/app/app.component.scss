@@ -1,0 +1,18 @@
+a {
+  .white-icon {
+    color: white;
+
+    &.right-spaced {
+      margin-right: 15px;
+    }
+
+    &:hover {
+      color: lightgrey;
+      cursor: pointer;
+    }
+  }
+
+  &.hidden-link {
+    display: none;
+  }
+}
