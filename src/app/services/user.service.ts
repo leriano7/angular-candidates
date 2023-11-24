@@ -1,37 +1,40 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { RequestAuth } from '../models/request-auth';
 import { Observable, switchMap, tap } from 'rxjs';
 import { User } from '../models/user';
 import { ResponseAuth } from '../models/response-auth';
+import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 
-const ENDPOINT = "http://ubuntuserver:3000";
+let ENDPOINT: string;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig) {
+    ENDPOINT = this.config.ENDPOINT;
+  }
 
-  public login = (credentials : RequestAuth) : Observable<User> => {
-    return this.http.post<ResponseAuth>(`${ENDPOINT}/auth/login`,credentials)
+  public login = (credentials: RequestAuth): Observable<User> => {
+    return this.http.post<ResponseAuth>(`${ENDPOINT}/auth/login`, credentials)
       .pipe(
-          tap((auth: ResponseAuth) =>
-              localStorage.setItem("token",`Bearer ${auth.access_token}`)
-          ),
-          switchMap((auth: ResponseAuth) =>
-              this.http.get<User>(`${ENDPOINT}/api/users/${auth.id}`)
-          )
+        tap((auth: ResponseAuth) =>
+          localStorage.setItem("token", `Bearer ${auth.access_token}`)
+        ),
+        switchMap((auth: ResponseAuth) =>
+          this.http.get<User>(`${ENDPOINT}/api/users/${auth.id}`)
+        )
       );
   }
 
-  public logout = () : void => {
+  public logout = (): void => {
     localStorage.removeItem('token');
   };
 
-  public isLogged = () : Boolean => {
+  public isLogged = (): Boolean => {
     // Coherción a booleano
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem('token');
   }
 }

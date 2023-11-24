@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -6,13 +6,16 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
+import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 
-const ENDPOINT = "http://ubuntuserver:3000";
+let ENDPOINT : string;
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor() {}
+  constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+    ENDPOINT = this.config.ENDPOINT;
+  }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if(this.needAuth(request.url, request.method)) {

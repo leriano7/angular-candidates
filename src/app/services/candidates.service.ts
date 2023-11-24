@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Candidate } from '../models/candidate';
 import { BehaviorSubject, Observable, of, switchMap, take, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CandidatesService {
+  private api! : string;
 
-  private api = "http://ubuntuserver:3000/api";
-
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, @Inject(APP_CONFIG) private config: AppConfig) {
+    this.api = `${this.config.ENDPOINT}/api`;
+  }
 
   public getCandidates = (): Observable<Candidate[]> => {
     return this.http.get<Candidate[]>(`${this.api}/candidates`);

@@ -6,12 +6,15 @@ import {
 import { CandidatesService } from './candidates.service';
 import { Candidate } from '../models/candidate';
 import { Experience } from '../models/experience';
-import { APP_CONFIG } from 'src/config/app.config'; 
+import { APP_CONFIG, AppConfig, Config } from 'src/config/app.config';
 
 describe('CandidatesService', () => {
   let service: CandidatesService;
   let httpMock: HttpTestingController;
   let testBed: TestBed;
+
+  let appConfig : AppConfig;
+  let ENDPOINT : string;
 
   const candidates: Candidate[] = [
     {
@@ -26,7 +29,7 @@ describe('CandidatesService', () => {
     },
   ];
 
-  const appConfig = { candidates };
+  //const appConfig = { candidates };
 
   beforeEach(() => {
     testBed = TestBed.configureTestingModule({
@@ -34,12 +37,14 @@ describe('CandidatesService', () => {
       providers: [
         {
           provide: APP_CONFIG,
-          useValue: appConfig,
+          useValue: Config,
         },
       ],
     });
     service = TestBed.inject(CandidatesService);
     httpMock = TestBed.inject(HttpTestingController);
+    appConfig = TestBed.inject(APP_CONFIG);
+    ENDPOINT = appConfig.ENDPOINT;
   });
 
   afterEach(() => {
@@ -54,7 +59,7 @@ describe('CandidatesService', () => {
     service.getCandidates().subscribe((retrieved) => {
       expect(retrieved).toEqual(candidates);
     });
-    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates');
+    const req = httpMock.expectOne(`${ENDPOINT}/api/candidates`);
     req.flush(candidates);
   });
 
@@ -71,7 +76,7 @@ describe('CandidatesService', () => {
 
     // It does not work for two methods -> GET candidates && POST candidates
     // service.save(newCandidate).subscribe(() => {});
-    // const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates');
+    // const req = httpMock.expectOne(`${ENDPOINT}/api/candidates/1`);
     // expect(req.request.method).toEqual('POST');
     // req.flush(candidates[0]);
     expect(true).toBeTruthy();
@@ -90,7 +95,7 @@ describe('CandidatesService', () => {
     };
 
     service.update(newCandidate).subscribe();
-    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates/1');
+    const req = httpMock.expectOne(`${ENDPOINT}/api/candidates/1`);
     expect(req.request.method).toEqual('PUT');
     req.flush(candidates[0]);
   });
@@ -98,7 +103,7 @@ describe('CandidatesService', () => {
 
   it('remove should call delete', () => {
     service.remove(1).subscribe();
-    const req = httpMock.expectOne('http://ubuntuserver:3000/api/candidates/1');
+    const req = httpMock.expectOne(`${ENDPOINT}/api/candidates/1`);
     expect(req.request.method).toEqual('DELETE');
     req.flush({});
   });

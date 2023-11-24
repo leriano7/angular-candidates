@@ -134,7 +134,7 @@ export class CandidateFormComponent implements OnInit {
       const skills = [];
       if (Array.isArray(this.candidate.skills)) {
         this.candidate.skills.forEach((skill, index) => {
-          skills.push(skill); // Add string to array os strings
+          skills.push(skill); // Add string to array of strings
           this.addSkill(); // Add control to FormArray
         });
       } else {
