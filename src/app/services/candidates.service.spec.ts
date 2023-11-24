@@ -8,29 +8,26 @@ import { Candidate } from '../models/candidate';
 import { Experience } from '../models/experience';
 import { APP_CONFIG, AppConfig, Config } from 'src/config/app.config';
 
+const newCandidate = {
+  name: 'Nombre 1',
+  surname: 'Apellido 1',
+  email: 'email@email.com',
+  experience: Experience.Junior,
+  skills: [],
+  previousProjects: [],
+  age: 25,
+};
+
+const candidates : Candidate[] = [newCandidate];
+
 describe('CandidatesService', () => {
   let service: CandidatesService;
   let httpMock: HttpTestingController;
-  let testBed: TestBed;
-
   let appConfig : AppConfig;
   let ENDPOINT : string;
 
-  const candidates: Candidate[] = [
-    {
-      id: 1,
-      name: 'Nombre 1',
-      surname: 'Apellido 1',
-      email: 'email@email.com',
-      experience: Experience.Junior,
-      skills: [],
-      previousProjects: [],
-      age: 25,
-    },
-  ];
-
   beforeEach(() => {
-    testBed = TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         {
@@ -62,16 +59,6 @@ describe('CandidatesService', () => {
   });
 
   it('create should call post', () => {
-    const newCandidate = {
-      name: 'Nombre 1',
-      surname: 'Apellido 1',
-      email: 'email@email.com',
-      experience: Experience.Junior,
-      skills: [],
-      previousProjects: [],
-      age: 25,
-    };
-
     // It does not work for two methods -> GET candidates && POST candidates
     // service.save(newCandidate).subscribe(() => {});
     // const req = httpMock.expectOne(`${ENDPOINT}/api/candidates/1`);
@@ -81,23 +68,12 @@ describe('CandidatesService', () => {
   });
 
   it('update should call put', () => {
-    const newCandidate = {
-      id: 1,
-      name: 'Nombre 1',
-      surname: 'Apellido 1',
-      email: 'email@email.com',
-      experience: Experience.Junior,
-      skills: [],
-      previousProjects: [],
-      age: 25,
-    };
-
-    service.update(newCandidate).subscribe();
+    const newCand = Object.assign({},newCandidate, {id : 1});
+    service.update(newCand).subscribe();
     const req = httpMock.expectOne(`${ENDPOINT}/api/candidates/1`);
     expect(req.request.method).toEqual('PUT');
-    req.flush(candidates[0]);
+    req.flush(newCand);
   });
-
 
   it('remove should call delete', () => {
     service.remove(1).subscribe();
