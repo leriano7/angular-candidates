@@ -8,6 +8,7 @@ import {
 import { Observable, catchError } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 import { UserService } from './services/user.service';
+import { Router } from '@angular/router';
 
 let ENDPOINT: string;
 
@@ -15,7 +16,7 @@ let ENDPOINT: string;
 export class AuthInterceptor implements HttpInterceptor {
 
   constructor(@Inject(APP_CONFIG) private config: AppConfig,
-    private userService : UserService) {
+    private userService : UserService, private router: Router) {
         ENDPOINT = this.config.ENDPOINT;
   }
 
@@ -29,12 +30,13 @@ export class AuthInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(catchError((error) => {
       if (error.status === 401 && error.error.data === 'Token expired') {
-        // TODO: Hacer algo
-
+        error.error.infodata='TOKEN_EXPIRED-401';
       } else if(error.status === 404) {
-        // TODO: Exercise
-
+        error.error.infodata='NOT_FOUND-404';
       }
+      // This should be done in component
+      this.userService.logout();
+      this.router.navigate(['/login']);
       throw error;
     }));
   }
