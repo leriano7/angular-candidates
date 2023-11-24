@@ -42,6 +42,7 @@ export class AuthInterceptor implements HttpInterceptor {
     */
     const needUrl = url.includes(`${ENDPOINT}/api`);
     const needMethod = method !== "GET";
-    return needUrl && needMethod;
+    const value = needUrl && needMethod;
+    return value;
   }
 }
