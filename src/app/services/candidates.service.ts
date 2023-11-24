@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Candidate } from '../models/candidate';
-import { BehaviorSubject, Observable, of, switchMap, take, throwError } from 'rxjs';
+import { Observable, switchMap, take, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { APP_CONFIG, AppConfig } from 'src/config/app.config';
 
