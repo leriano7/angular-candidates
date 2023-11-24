@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil, Subscription } from 'rxjs';
+//import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { LoginComponent } from './components/login/login.component';
 import { UserService } from './services/user.service';
 
