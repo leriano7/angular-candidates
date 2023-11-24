@@ -29,8 +29,6 @@ describe('CandidatesService', () => {
     },
   ];
 
-  //const appConfig = { candidates };
-
   beforeEach(() => {
     testBed = TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
