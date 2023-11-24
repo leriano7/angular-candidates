@@ -7,32 +7,44 @@ import {
 } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'src/config/app.config';
+import { UserService } from './services/user.service';
 
-let ENDPOINT : string;
+let ENDPOINT: string;
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(@Inject(APP_CONFIG) private config: AppConfig) {
-    ENDPOINT = this.config.ENDPOINT;
+  constructor(@Inject(APP_CONFIG) private config: AppConfig,
+    private userService : UserService) {
+        ENDPOINT = this.config.ENDPOINT;
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if(this.needAuth(request.url, request.method)) {
+    if (this.needAuth(request.url, request.method)) {
       request = request.clone({
-        setHeaders : {
-          Authorization : this.token ? this.token : ""
+        setHeaders: {
+          Authorization: this.token ? this.token : ""
         }
       });
     }
-    return next.handle(request).pipe(catchError((error)=>{throw error}));
+    return next.handle(request).pipe(catchError((error) => {
+      if (error.status === 401 && error.error.data === 'Token expired') {
+        // TODO: Hacer algo
+
+      } else if(error.status === 404) {
+        // TODO: Exercise
+
+      }
+      throw error;
+    }));
   }
+
 
   get token() {
-    return localStorage.getItem("token");
+    return this.userService.getToken();
   }
 
-  private needAuth(url: string, method: string) : Boolean {
+  private needAuth(url: string, method: string): Boolean {
     /*
     {ENDPOINT}/api/users/{id} -> If POST - PUT - DELETE -> Needs Bearer
     {ENDPOINT}/api/candidates/{id} -> If POST - PUT - DELETE -> Needs Bearer

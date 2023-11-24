@@ -37,4 +37,9 @@ export class UserService {
     // Coherción a booleano
     return !!localStorage.getItem('token');
   }
+
+  public getToken = () : string | null => {
+    if(!!localStorage.getItem('token')) return localStorage.getItem('token');
+    else return null;
+  }
 }
