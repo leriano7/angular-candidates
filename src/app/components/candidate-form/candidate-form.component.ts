@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Candidate } from 'src/app/models/candidate';
+import { Project } from 'src/app/models/project';
 import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
 
 @Component({
@@ -110,6 +111,12 @@ export class CandidateFormComponent implements OnInit {
 
   public get skills() {
     return this.candidateForm.get('skills') as FormArray;
+  }
+
+  public get projectsModel() : Project[] {
+    if(this.candidate?.previousProjects)
+      return this.candidate.previousProjects
+    return [];
   }
 
   public onSubmit = () => {
