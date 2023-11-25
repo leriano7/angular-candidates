@@ -10,4 +10,15 @@ export class ProjectCardComponent {
 
   @Input() project! : Project;
 
+  get technologies() : string {
+    if(this.project?.technology?.length >= 1) {
+      return this.project.technology.join(', ');
+    }
+    return '';
+  }
+
+  public editProject = () => {};
+
+  public removeProject = () => {};
+
 }

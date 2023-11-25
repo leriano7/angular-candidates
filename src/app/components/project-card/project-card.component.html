@@ -1,9 +1,26 @@
-<p>***********************</p>
-<p>{{project.name}}</p>
-<p>{{project.description}}</p>
-<p>{{project.experience}} años</p>
-<p>{{project.technology.length}} tecnologías</p>
-<div *ngFor="let technology of project.technology; let i=index">
-  {{project.technology[i]}} <!-- or {{ technology }} -->
-</div>
-<p>***********************</p>
+<mat-card class="project-card">
+  <mat-card-header>
+    <mat-card-title class="project-title">
+      <span class="project-title__name">{{ project.name }}</span>
+      <span class="project-title__value">{{ project.experience }} años</span>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="project-card__content">
+    <div class="project-detail">
+      <span class="project-detail__label">Descripción</span>
+      <span class="project-detail__value">{{ project.description }}</span>
+    </div>
+    <div class="project-detail">
+      <span class="project-detail__label">Tecnologías</span>
+      <span class="project-detail__value">{{technologies}}</span>
+    </div>
+  </mat-card-content>
+  <mat-card-actions [align]="'end'">
+    <button type="button" mat-button color="primary" (click)="editProject()">
+      Editar
+    </button>
+    <button type="button" mat-button color="warn" (click)="removeProject()">
+      Borrar
+    </button>
+  </mat-card-actions>
+</mat-card>
