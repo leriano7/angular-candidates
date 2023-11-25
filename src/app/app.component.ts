@@ -9,45 +9,24 @@ import { UserService } from './services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   constructor(private userService: UserService) {}
 
   public title = 'angular-101-day3';
-  public isLoggedIn! : Boolean;
 
-  private subscription : Subscription | null = null;
-
-  ngOnInit(): void {
-    this.isLoggedIn = this.userService.isLogged();
-  }
 
   public logoutClass = () => {
     // Object notation
     return {
-      "hidden-link" : !this.isLoggedIn
+      "hidden-link" : !this.userService.isLogged()
     }
   };
 
-  public subscribeToLoginEvent(componentRef: any) {
-    if(componentRef instanceof LoginComponent) {
-      this.subscription = (componentRef as LoginComponent)
-          .loginEvent.subscribe(()=> {
-            this.isLoggedIn = this.userService.isLogged();
-          });
-    }
-  }
-
-  public unsubscribeFromLoginEvent() {
-    if(this.subscription) {
-      this.subscription.unsubscribe();
-      this.subscription = null;
-    }
-  }
 
   public logout = () => {
     this.userService.logout();
-    this.isLoggedIn = this.userService.isLogged();
+    //this.isLoggedIn = this.userService.isLogged();
   }
 
   //private count = 0;

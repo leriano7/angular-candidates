@@ -30,16 +30,19 @@ export class EditCandidateComponent implements OnInit {
             // It is a number.
             this.candidatesService.getCandidate(selectedId).pipe(take(1)).subscribe({
               next : (candidate: Candidate) => observer.next(candidate),
-              error : () => this.router.navigate(["/"])
+              error : () => {
+                // It is just done in interceptor
+                // this.router.navigate(["/"])
+              }
             });
           } else {
             // It is not a number.
             this.router.navigate(["/"])
-          }          
+          }
         });
       })
     );
-    
+
   }
 
   public onSubmit = (candidate: Candidate) => {

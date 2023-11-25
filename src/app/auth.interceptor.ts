@@ -21,6 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    // Pre request
     if (this.needAuth(request.url, request.method)) {
       request = request.clone({
         setHeaders: {
@@ -28,19 +29,20 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
     }
+    // Post request
     return next.handle(request).pipe(catchError((error) => {
       if (error.status === 401 && error.error.data === 'Token expired') {
+        // Here we write errors to give them to upper components. No used so far...
         error.error.infodata='TOKEN_EXPIRED-401';
       } else if(error.status === 404) {
         error.error.infodata='NOT_FOUND-404';
       }
-      // This should be done in component
+      // This should be done in component...
       this.userService.logout();
-      this.router.navigate(['/login']);
+      this.router.navigate(['/']);
       throw error;
     }));
   }
-
 
   get token() {
     return this.userService.getToken();
