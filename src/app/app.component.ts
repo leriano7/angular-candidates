@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 //import { first, fromEvent, of, map, scan, throttleTime, take, last, filter, mergeMap, interval, switchMap, timer, takeUntil, Subscription } from 'rxjs';
-import { Subscription } from 'rxjs';
-import { LoginComponent } from './components/login/login.component';
 import { UserService } from './services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +10,9 @@ import { UserService } from './services/user.service';
 })
 export class AppComponent {
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   public title = 'angular-101-day3';
-
 
   public logoutClass = () => {
     // Object notation
@@ -23,10 +21,9 @@ export class AppComponent {
     }
   };
 
-
   public logout = () => {
     this.userService.logout();
-    //this.isLoggedIn = this.userService.isLogged();
+    this.router.navigate(['/']);
   }
 
   //private count = 0;

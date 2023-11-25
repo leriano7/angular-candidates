@@ -16,6 +16,9 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { AuthInterceptor } from './auth.interceptor';
+import { ProjectListComponent } from './components/project-list/project-list.component';
+import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { ProjectModalComponent } from './components/project-modal/project-modal.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,10 @@ import { AuthInterceptor } from './auth.interceptor';
     CandidateFormComponent,
     EditCandidateComponent,
     ConfirmationModalComponent,
-    LoginComponent
+    LoginComponent,
+    ProjectListComponent,
+    ProjectCardComponent,
+    ProjectModalComponent
   ],
   imports: [
     BrowserModule,
