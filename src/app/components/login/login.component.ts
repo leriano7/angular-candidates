@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from "@angular/core";
+import { Component, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RequestAuth } from "src/app/models/request-auth";
@@ -20,10 +20,32 @@ export class LoginComponent {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      email: ["", Validators.required],
-      password: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required]],
     });
   }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  getEmailErrors = () => {
+    if(this.email?.hasError('required')) {
+      return 'Se requiere un email';
+    }
+    return this.email?.hasError('email') ? 'Email incorrecto' : '';
+  };
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  getPasswordErrors = () => {
+    if(this.password?.hasError('required')) {
+      return 'Se requiere contraseña';
+    }
+    return '';
+  };
 
   submit() {
     if (this.loginForm.valid) {
