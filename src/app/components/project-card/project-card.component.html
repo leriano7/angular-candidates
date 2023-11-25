@@ -1,1 +1,9 @@
-<p>project-card works!</p>
+<p>***********************</p>
+<p>{{project.name}}</p>
+<p>{{project.description}}</p>
+<p>{{project.experience}} años</p>
+<p>{{project.technology.length}} tecnologías</p>
+<div *ngFor="let technology of project.technology; let i=index">
+  {{project.technology[i]}} <!-- or {{ technology }} -->
+</div>
+<p>***********************</p>

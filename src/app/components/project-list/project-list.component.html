@@ -1,33 +1,10 @@
-<div class="add-button">
-  <button
-      mat-fab
-      color="primary"
-      aria-label="Añadir un candidato" >
-      <mat-icon>add</mat-icon>
-  </button>
-</div>
 <div class="project-list">
   <div *ngFor="let project of projectList">
-      <div>{{project.name}}</div>
-      <!-- <app-candidate-card
-        [candidate]="candidate"
-        (outDestroy)="deletedCard()"></app-candidate-card> -->
+    <app-project-card [project]="project"></app-project-card>
   </div>
 </div>
-
-<!-- <div class="add-button">
-  <button
-      mat-fab
-      color="primary"
-      aria-label="Añadir un candidato"
-      routerLink="/create">
-      <mat-icon>add</mat-icon>
-  </button>
-</div>
-<div class="candidate-list">
-  <div *ngFor="let candidate of candidates">
-      <app-candidate-card
-        [candidate]="candidate"
-        (outDestroy)="deletedCard()"></app-candidate-card>
-  </div>
-</div> -->
+<button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="addProject()">+ Añadir Proyecto</button>

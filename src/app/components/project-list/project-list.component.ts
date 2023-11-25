@@ -8,4 +8,6 @@ import { Project } from 'src/app/models/project';
 })
 export class ProjectListComponent {
   @Input() projectList! : Array<Project>;
+
+  public addProject = () => {};
 }
