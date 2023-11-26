@@ -1,1 +1,38 @@
-<p>project-modal works!</p>
+<form [formGroup]="projectForm" class="project-form">
+  <h2 mat-dialog-title>{{operation}}</h2>
+  <div mat-dialog-content>
+    <mat-form-field class="full">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text" formControlName="name" />
+      <!-- <mat-error *ngIf="!candidateForm.pristine && name?.invalid">{{ getNameErrors() }}</mat-error>  -->
+    </mat-form-field>
+    <mat-form-field class="full">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput cdkTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"
+        formControlName="description"></textarea>
+      <!-- <mat-error *ngIf="!candidateForm.pristine && name?.invalid">{{ getNameErrors() }}</mat-error>  -->
+    </mat-form-field>
+    <mat-form-field class="full">
+      <mat-label>Experiencia</mat-label>
+      <input matInput type="number" formControlName="experience" /> años
+      <!-- <mat-error *ngIf="!candidateForm.pristine && name?.invalid">{{ getNameErrors() }}</mat-error>  -->
+    </mat-form-field>
+    <div formArrayName="technologies" class="full">
+      <h2>Technologies</h2>
+      <button mat-raised-button color="primary" type="button" (click)="addTechnology()">+ Add another
+        technology</button> <br />
+      <mat-form-field class="half" *ngFor="let technology of technologies.controls; let i = index">
+        <mat-label>Technology</mat-label>
+        <input matInput type="text" [formControlName]="i" />
+        <button matSuffix type="button" mat-icon-button (click)="removeTechnology(i)">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions class="full actions">
+    <button mat-button cdkFocusInitial [mat-dialog-close]="data" [disabled]="true">Guardar</button>
+    <button mat-button (click)="cancel()">Cancelar</button>
+    <button mat-button (click)="reset()">Reset</button>
+  </div>
+</form>
