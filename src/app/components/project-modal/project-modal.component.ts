@@ -57,7 +57,28 @@ export class ProjectModalComponent implements OnInit {
 
   public removeTechnology = (index: number) => {
     this.technologies.removeAt(index);
+  };
 
+  public save = () => {
+    const newTechs = this.cleanBlankTechs(this.projectForm.value.technologies);
+    this.projectForm.value.technologies = newTechs;
+    const newP = {
+      name : this.projectForm.value.name,
+      description : this.projectForm.value.description,
+      experience : this.projectForm.value.experience,
+      technology : this.projectForm.value.technologies
+     };
+    this.dialogRef.close(newP);
+  };
+
+  private cleanBlankTechs(techs: Array<string>) : Array <string> {
+    return techs.filter((thisTech) => {
+      return (thisTech.trim().length > 0);
+    });
+  }
+
+  public cancel = (): void => {
+    this.dialogRef.close();
   };
 
   public reset = () => {
@@ -87,31 +108,5 @@ export class ProjectModalComponent implements OnInit {
       };
       this.projectForm.setValue(resetValue);
     }
-  };
-
-  private cleanBlankTechs(techs: Array<string>) : Array < string > {
-    return techs.filter((thisTech) => {
-      return (thisTech.trim().length > 0);
-    });
-  }
-
-  /*
-  // We must capture before close in View
-  const newTechs = this.cleanBlankTechs(this.candidateForm.value.technologies);
-  this.candidateForm.value.skills = newSkills;
-  const savedCandidate: Candidate = Object.assign(
-    {},
-    this.candidate,
-    this.candidateForm.value
-  );
-  this.candidateSubmitter.emit(savedCandidate);
-  */
-
-  public cancel = (): void => {
-    this.dialogRef.close();
-  };
-
-  public onSubmit = () => {
-    // Nothing to DO. It will be handled via mat-dialog-close.
   };
 }

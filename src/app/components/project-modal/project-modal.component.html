@@ -31,7 +31,7 @@
     </div>
   </div>
   <div mat-dialog-actions class="full actions">
-    <button mat-button cdkFocusInitial [mat-dialog-close]="data" [disabled]="true">Guardar</button>
+    <button mat-button (click)="save()" cdkFocusInitial [disabled]="projectForm.invalid">Guardar</button>
     <button mat-button (click)="cancel()">Cancelar</button>
     <button mat-button (click)="reset()">Reset</button>
   </div>
