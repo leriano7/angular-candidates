@@ -34,7 +34,6 @@ export class UserService {
   };
 
   public isLogged = (): Boolean => {
-    // Coherción a booleano
     return !!localStorage.getItem('token');
   }
 

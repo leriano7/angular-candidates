@@ -50,7 +50,7 @@ export class LoginComponent {
   submit() {
     if (this.loginForm.valid) {
       const creds = this.loginForm.value as RequestAuth;
-      // TODO: we must work with error
+      // We should work with error here (authorization error).
       this.service.login(creds).subscribe((user: User) => {
         this.loginEvent.emit();
         this.router.navigate(["/"]);

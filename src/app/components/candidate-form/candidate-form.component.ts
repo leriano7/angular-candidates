@@ -19,7 +19,7 @@ import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
 })
 export class CandidateFormComponent implements OnInit {
   public candidateForm!: FormGroup;
-  
+
   // For edition -> reset purposes
   private initialProjects! : Project[] | null;
 
@@ -38,7 +38,8 @@ export class CandidateFormComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.initialProjects = (this.candidate?.previousProjects) ? ([] as Array<Project>).concat(this.candidate.previousProjects) : null;
+    this.initialProjects = (this.candidate?.previousProjects) ?
+        ([] as Array<Project>).concat(this.candidate.previousProjects) : null;
     this.reset();
   }
 
@@ -55,7 +56,7 @@ export class CandidateFormComponent implements OnInit {
       return 'Debe introducir un nombre.';
     }
     return this.name?.hasError('minlength')
-      ? 'El nombre debe tener al menos 2 carácteres'
+      ? 'El nombre debe tener al menos 2 caracteres'
       : '';
   }
 
@@ -124,7 +125,7 @@ export class CandidateFormComponent implements OnInit {
       // If editing candidate
       return this.candidate.previousProjects
     }
-    // If creating candidate      
+    // If creating candidate
     return this.createdProjects;
   }
 

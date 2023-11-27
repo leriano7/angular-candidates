@@ -32,14 +32,14 @@ export class AuthInterceptor implements HttpInterceptor {
     // Post request
     return next.handle(request).pipe(catchError((error) => {
       if (error.status === 401 && error.error.data === 'Token expired') {
-        // Here we write errors to give them to upper components. No used so far...
+        // Here we write errors to give them to upper components. Not used so far...
         error.error.infodata='TOKEN_EXPIRED-401';
       } else if(error.status === 404) {
         error.error.infodata='NOT_FOUND-404';
       }
       // This should be done in component...
       this.userService.logout();
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
       throw error;
     }));
   }
