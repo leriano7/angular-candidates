@@ -42,22 +42,30 @@ export class CandidateCardComponent implements OnInit {
     if(this.candidate && Array.isArray(this.candidate.previousProjects)) {
       // We define a new block function (to use only here).
       // This function returns true if not found or found in given index.
-      const onlyUnique = (
+      
+      const onlyUniqueSameExperience = (
+        // Use to avoid repetitions with the same of experience.
         value : { technology: string, experience:number },
         index: number,
         self : { technology: string, experience:number }[]) : Boolean => {
           const found = self.findIndex((v : { technology: string, experience:number }) =>
-            // Must include the >"=" to avoid duplication of the same value.
             v.technology === value.technology && v.experience >= value.experience
           );
-          console.log('========> Ejecución');
-          console.log('value => '+JSON.stringify(value));
-          console.log('index => '+index);
-          console.log('self => '+JSON.stringify(self));
-          console.log('found => '+JSON.stringify(found));
           return found === -1 || found === index;
       };
 
+      const onlyUniqueDifferentExperience = (
+        // Use to avoid repetitions with diferent values of experience.
+        value : { technology: string, experience:number },
+        index: number,
+        self : { technology: string, experience:number }[]) : Boolean => {
+          const found = self.findIndex((v : { technology: string, experience:number }) =>
+            v.technology === value.technology && v.experience > value.experience
+          );
+          return found === -1 || found === index;
+      };
+
+      // It takes the biggest experience in one only project as the selected experience for technology.
       this.skills = this.candidate.previousProjects
           .map((project)=>{
             return project.technology.map((technology)=>{
@@ -68,7 +76,8 @@ export class CandidateCardComponent implements OnInit {
             });
           })
           .flat()
-          .filter(onlyUnique);
+          .filter(onlyUniqueSameExperience)
+          .filter(onlyUniqueDifferentExperience);
     }
   };
 
@@ -79,7 +88,6 @@ export class CandidateCardComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
       if (result) {
         this.candidateService.remove(result.id).subscribe(()=>{
           this.outDestroy.emit(0);

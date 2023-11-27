@@ -4,6 +4,6 @@
   <h2>{{ data.name }} {{ data.surname }}</h2>
 </div>
 <div mat-dialog-actions [align]="'end'">
-  <button mat-button cdkFocusInitial (click)="cancel()">No, gracias</button>
+  <button mat-button (click)="cancel()">No, gracias</button>
   <button mat-button [mat-dialog-close]="data" color="warn">Ok</button>
 </div>

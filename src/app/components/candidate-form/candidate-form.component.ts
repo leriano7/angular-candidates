@@ -19,6 +19,12 @@ import { linkedinPattern, phonePattern } from 'src/app/utils/validators';
 })
 export class CandidateFormComponent implements OnInit {
   public candidateForm!: FormGroup;
+  
+  // For edition -> reset purposes
+  private initialProjects! : Project[] | null;
+
+  // For creation -> save created projects until save or reset
+  private createdProjects! : Project[];
 
   constructor(private fb: FormBuilder) {
     this.candidateForm = this.fb.group({
@@ -32,11 +38,11 @@ export class CandidateFormComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+    this.initialProjects = (this.candidate?.previousProjects) ? ([] as Array<Project>).concat(this.candidate.previousProjects) : null;
     this.reset();
   }
 
   @Input() candidate: Candidate | null = null;
-
   @Output() candidateSubmitter = new EventEmitter<Candidate>();
   @Output() backEmitter = new EventEmitter();
 
@@ -114,9 +120,12 @@ export class CandidateFormComponent implements OnInit {
   }
 
   public get projectsModel() : Project[] {
-    if(this.candidate?.previousProjects)
+    if(this.candidate?.previousProjects) {
+      // If editing candidate
       return this.candidate.previousProjects
-    return [];
+    }
+    // If creating candidate      
+    return this.createdProjects;
   }
 
   public onSubmit = () => {
@@ -127,6 +136,10 @@ export class CandidateFormComponent implements OnInit {
       this.candidate,
       this.candidateForm.value
     );
+    if(this.candidate==null) {
+      // Add created projects to new candidate
+      savedCandidate.previousProjects = this.createdProjects;
+    }
     this.candidateSubmitter.emit(savedCandidate);
   };
 
@@ -136,6 +149,7 @@ export class CandidateFormComponent implements OnInit {
 
   public reset = () => {
     this.candidateForm.reset();
+    this.createdProjects = [];
     this.skills.clear();
     if (this.candidate) {
       const skills = [];
@@ -158,6 +172,12 @@ export class CandidateFormComponent implements OnInit {
         skills,
       };
       this.candidateForm.setValue(resetValue);
+      // Only if edition -> this.candidate
+      if(this.initialProjects) {
+        this.candidate.previousProjects = ([] as Array<Project>).concat(this.initialProjects as Array<Project>);
+      } else {
+        this.candidate.previousProjects = [];
+      }
     }
   };
 

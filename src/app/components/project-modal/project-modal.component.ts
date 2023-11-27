@@ -39,13 +39,34 @@ export class ProjectModalComponent implements OnInit {
     return this.projectForm.get('name');
   }
 
+  public getNameErrors = () : string => {
+    if(this.name?.hasError('required')) {
+      return 'Se requiere nombre';
+    }
+    return '';
+  };
+
   public get description() {
     return this.projectForm.get('description');
   }
 
+  public getDescriptionErrors = () : string => {
+    if(this.description?.hasError('required')) {
+      return 'Se requiere descripción';
+    }
+    return '';
+  };
+
   public get experience() {
     return this.projectForm.get('experience');
   }
+
+  public getExperienceErrors = () : string => {
+    if(this.experience?.hasError('required')) {
+      return 'Se requiere experiencia';
+    }
+    return '';
+  };
 
   public get technologies() {
     return this.projectForm.get('technologies') as FormArray;

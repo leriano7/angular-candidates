@@ -30,7 +30,6 @@ export class ProjectCardComponent {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(JSON.stringify(result));
         this.editionEmitter.emit({i: this.ind, p: result });
       }
     });

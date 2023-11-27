@@ -30,7 +30,7 @@ export class ProjectListComponent {
   public projectEdited = (edited: any) => {
     const editedIndex = edited.i;
     const newEP = edited.p as Project;
-    this.projectList[editedIndex] = Object.assign([],newEP);
+    this.projectList[editedIndex] = Object.assign({},newEP);
   }
 
   public projectRemoved = (index : number) => {
